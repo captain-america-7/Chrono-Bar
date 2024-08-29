@@ -4,46 +4,172 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progress Bars</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+      
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f907fc;
+background-image: linear-gradient(315deg, #f907fc 0%, #05d6d9 74%);
+            margin: 0;
+            flex-direction: column;
+        }
+        .progress-container {
+            width: 80%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            position: relative;
+            height: 30px;
+            width: 60%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+        .progress-bar div {
+            height: 100%;
+            border-radius: 5px;
+        }
+        .label {
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        .percentage {
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <label>Year Progress:</label>
-        <div class="progress-container">
-            <div class="progress-bar" id="year-progress"></div>
+    <div class="progress-container">
+        <div class="progress-bar-container">
+            <div class="percentage" id="secondsPercentage">0%</div>
+            <div class="progress-bar" id="secondsProgress"><div style="background-color: #5078F2;"></div></div>
+            <div class="label" id="secondsLabel">Seconds</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="percentage" id="minutesPercentage">0%</div>
+            <div class="progress-bar" id="minutesProgress"><div style="background-color: #FFA500;"></div></div>
+            <div class="label" id="minutesLabel">Minutes</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="percentage" id="hoursPercentage">0%</div>
+            <div class="progress-bar" id="hoursProgress"><div style="background-color: #FFD700;"></div></div>
+            <div class="label" id="hoursLabel">Hours</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="percentage" id="dayPercentage">0%</div>
+            <div class="progress-bar" id="dayProgress"><div style="background-color: #ADFF2F;"></div></div>
+            <div class="label" id="dayLabel">Day</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="percentage" id="weekPercentage">0%</div>
+            <div class="progress-bar" id="weekProgress"><div style="background-color: #32CD32;"></div></div>
+            <div class="label" id="weekLabel">Week</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="percentage" id="monthPercentage">0%</div>
+            <div class="progress-bar" id="monthProgress"><div style="background-color: #00FA9A;"></div></div>
+            <div class="label" id="monthLabel">Month</div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="percentage" id="yearPercentage">0%</div>
+            <div class="progress-bar" id="yearProgress"><div style="background-color: #00CED1;"></div></div>
+            <div class="label" id="yearLabel">Year</div>
         </div>
     </div>
 
-    <div>
-        <label>Month Progress:</label>
-        <div class="progress-container">
-            <div class="progress-bar" id="month-progress"></div>
-        </div>
-    </div>
+    <script>
+        function updateProgressBars() {
+            const now = new Date();
 
-    <div>
-        <label>Day Progress:</label>
-        <div class="progress-container">
-            <div class="progress-bar" id="day-progress"></div>
-        </div>
-    </div>
+            // Seconds progress
+            const secondsProgress = (now.getSeconds() / 60) * 100;
 
-    <div>
-        <label>Hour Progress:</label>
-        <div class="progress-container">
-            <div class="progress-bar" id="hour-progress"></div>
-        </div>
-    </div>
+            // Minutes progress
+            const minutesProgress = (now.getMinutes() / 60) * 100;
 
-    <div>
-        <label>Minute Progress:</label>
-        <div class="progress-container">
-            <div class="progress-bar" id="minute-progress"></div>
-        </div>
-    </div>
+            // Hours progress
+            const hoursProgress = (now.getHours() / 24) * 100;
 
-    
+            // Day progress
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
+            const dayProgress = ((now - startOfDay) / (endOfDay - startOfDay)) * 100;
 
-    <script src="scripts.js"></script>
+            // Week progress
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay());
+            const endOfWeek = new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000);
+            const weekProgress = ((now - startOfWeek) / (endOfWeek - startOfWeek)) * 100;
+
+            // Month progress
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            const monthProgress = ((now - startOfMonth) / (endOfMonth - startOfMonth)) * 100;
+
+            // Year progress
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+            const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+
+            // Day of the week
+            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const dayOfWeek = daysOfWeek[now.getDay()];
+
+            // Week number
+            const startOfYearForWeek = new Date(now.getFullYear(), 0, 1);
+            const pastDaysOfYear = (now - startOfYearForWeek) / 86400000;
+            const weekNumber = Math.ceil((pastDaysOfYear + startOfYearForWeek.getDay() + 1) / 7);
+
+            // Update progress bars and labels
+            document.getElementById('secondsProgress').children[0].style.width = secondsProgress + '%';
+            document.getElementById('secondsPercentage').innerText = secondsProgress.toFixed(2) + '%';
+            document.getElementById('secondsLabel').innerText = 'Seconds: ' + now.getSeconds() + ' sec';
+
+            document.getElementById('minutesProgress').children[0].style.width = minutesProgress + '%';
+            document.getElementById('minutesPercentage').innerText = minutesProgress.toFixed(2) + '%';
+            document.getElementById('minutesLabel').innerText = 'Minutes: ' + now.getMinutes() + ' min';
+
+            document.getElementById('hoursProgress').children[0].style.width = hoursProgress + '%';
+            document.getElementById('hoursPercentage').innerText = hoursProgress.toFixed(2) + '%';
+            document.getElementById('hoursLabel').innerText = 'Hours: ' + now.getHours() + ' hr';
+
+            document.getElementById('dayProgress').children[0].style.width = dayProgress + '%';
+            document.getElementById('dayPercentage').innerText = dayProgress.toFixed(2) + '%';
+            document.getElementById('dayLabel').innerText = 'Day: ' + dayOfWeek;
+
+            document.getElementById('weekProgress').children[0].style.width = weekProgress + '%';
+            document.getElementById('weekPercentage').innerText = weekProgress.toFixed(2) + '%';
+            document.getElementById('weekLabel').innerText = 'Week: ' + weekNumber;
+
+            document.getElementById('monthProgress').children[0].style.width = monthProgress + '%';
+            document.getElementById('monthPercentage').innerText = monthProgress.toFixed(2) + '%';
+            document.getElementById('monthLabel').innerText = 'Month: ' + (now.getMonth() + 1);
+
+            document.getElementById('yearProgress').children[0].style.width = yearProgress + '%';
+            document.getElementById('yearPercentage').innerText = yearProgress.toFixed(2) + '%';
+            document.getElementById('yearLabel').innerText = 'Year: ' + now.getFullYear();
+        }
+
+        // Initial call to update the progress bars
+        updateProgressBars();
+
+        // Update the progress bars every second
+        setInterval(updateProgressBars, 1000);
+    </script>
 </body>
 </html>
